@@ -7,7 +7,27 @@ import (
 )
 
 func serveConnection(conn net.Conn) {
+	defer conn.Close()
 	fmt.Println("new connection")
+	
+	for {
+		var bufResult []byte
+		for {
+			buf := make([]byte, 1024)
+			n, _ := conn.Read(buf)
+//			fmt.Printf("n=%d\n", n)
+			if n > 0 {
+				bufResult = append(bufResult, buf[:n]...)
+				if n < 1024 {
+					break
+				}
+			} else {
+				break
+			}
+		}
+		fmt.Println(string(bufResult))
+	}
+	fmt.Println("exit new connection")
 }
 
 func main() {
