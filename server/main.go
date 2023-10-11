@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+func handleCommand(command string, conn net.Conn) {
+	fmt.Println(command)
+	conn.Write([]byte("bad command"))
+}
+
 func serveConnection(conn net.Conn) {
 	defer conn.Close()
 	fmt.Println("new connection")
@@ -15,7 +20,6 @@ func serveConnection(conn net.Conn) {
 		for {
 			buf := make([]byte, 1024)
 			n, _ := conn.Read(buf)
-//			fmt.Printf("n=%d\n", n)
 			if n > 0 {
 				bufResult = append(bufResult, buf[:n]...)
 				if n < 1024 {
@@ -25,7 +29,7 @@ func serveConnection(conn net.Conn) {
 				break
 			}
 		}
-		fmt.Println(string(bufResult))
+		handleCommand(string(bufResult), conn)
 	}
 	fmt.Println("exit new connection")
 }
