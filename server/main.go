@@ -29,6 +29,7 @@ func handleCommand(in string, conn net.Conn) {
 			if len(commands) > 1 {
 				var b []byte
 				output, b = getFile(commands[1])
+				conn.Write([]byte("create file: " + commands[1]))
 				conn.Write(b)
 			} else {
 				output = "error to copy file"
